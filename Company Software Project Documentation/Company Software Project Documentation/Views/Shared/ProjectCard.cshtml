@@ -1,0 +1,21 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model Company_Software_Project_Documentation.Models.Project
+
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Title</h5>
+        <h6 class="card-subtitle mb-2 text-muted">@Model.Description</h6>
+        <span class="alert-success">
+            <p class="card-text">@Model.DateTime</p>
+        </span>
+    
+
+        @* <a href="@Url.Action("Details", "Projects", new { id = Model.Id })" class="card-link">Details</a>
+        <a href="@Url.Action("Edit", "Projects", new { id = Model.Id })" class="card-link">Edit</a>
+        <a href="@Url.Action("Delete", "Projects", new { id = Model.Id })" class="card-link">Delete</a></div> *@
+        
+    </div>
+</div>
