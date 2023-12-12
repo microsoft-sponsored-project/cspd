@@ -19,10 +19,6 @@ namespace Company_Software_Project_Documentation.Models
         public string Description { get; set; }
         [Required(ErrorMessage = "Data proiectului este obligatorie")]
         public DateTime DateTime { get; set; }
-
-
-        [NotMapped] // Exclude this category from being mapped to the database
-        // For the categories we want to be able to select from a list of categories
         public virtual IEnumerable<Article>? Articles { get; set; }
 
         // PASUL 6 - useri si roluri

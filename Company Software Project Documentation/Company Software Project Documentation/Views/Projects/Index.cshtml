@@ -23,7 +23,9 @@
 }
 <br />
 
-@* <a href="@Url.Action("New", "Projects")" class="btn btn-success">Create</a>
-<br/>
-<br/>
-<a href="@Url.Action("Index", "")" class="btn btn-primary">Show Categories</a> *@
+@if (ViewBag.afisareButoane != null && ViewBag.afisareButoane == true && ViewBag.esteEditor || ViewBag.esteAdmin == true)
+{
+    <a href="@Url.Action("New", "Projects")" class="btn btn-success">Creaza un proiect nou</a>
+}
+
+

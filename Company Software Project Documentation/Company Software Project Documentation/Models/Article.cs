@@ -26,7 +26,7 @@ namespace Company_Software_Project_Documentation.Models
 
 
         // Un articol se afla intr-o categorie
-        [Required(ErrorMessage = "Proiectul este obligatorie")]
+        [Required(ErrorMessage = "Proiectul este obligatoriu")]
         public int? ProjectId { get; set; }
         // The category we want the article to be in and the list of comments
         public virtual Project? Project { get; set; }

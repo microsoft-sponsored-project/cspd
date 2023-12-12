@@ -1,0 +1,38 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model Company_Software_Project_Documentation.Models.Project
+
+<h2>Showing Project Named "@Model.Title"</h2>
+<br />
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" role="alert">
+        @ViewBag.Message
+    </div>
+}
+
+
+@Html.Partial("ProjectCard", Model)
+
+
+<br/><br/>
+
+<h3>Articole</h3>
+@foreach (var article in Model.Articles)
+{
+    @Html.Partial("ArticleCard", article)
+    <br />
+}
+<br />
+<br />
+
+@if (ViewBag.afisareButoane != null && ViewBag.afisareButoane == true && Model.UserId == ViewBag.userCurent || ViewBag.esteAdmin == true)
+{
+    <a href="@Url.Action("New", "Articles", new { id = Model.Id })" class="btn btn-success">Creaza un articol nou</a>
+}
+
