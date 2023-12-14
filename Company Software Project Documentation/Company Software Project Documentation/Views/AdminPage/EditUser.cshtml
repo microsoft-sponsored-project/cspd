@@ -1,0 +1,51 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model Company_Software_Project_Documentation.Models.UserDTO
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" role="alert">
+        @ViewBag.Message
+    </div>
+}
+
+<h2 class="text-center mt-5">Editare utilizator</h2>
+<br />
+
+@using(Html.BeginForm(actionName: "EditUser", controllerName:
+"AdminPage", routeValues: new { id = Model.Id }))
+{
+    @Html.ValidationSummary()
+
+    @Html.Label("FirstName", "Nume utilizator")
+    <br />
+    @Html.TextBox("FirstName", Model.UserName, new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.UserName, null, new { @class = "text-danger" })
+    <br />
+
+    @Html.Label("LastName", "Email")
+    <br />
+    @Html.TextBox("LastName", Model.Email, new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.Email, null, new { @class = "text-danger" })
+    <br />
+
+    @if (ViewBag.Roles != null)
+    {
+        @Html.DropDownListFor(m => m.RoleId, new SelectList(ViewBag.Roles, "Value", "Text"), "Selectati rolul", new { @class = "form-control" })
+    }
+    else
+    {
+        <p class="text-danger">No roles available.</p>
+    }
+    @Html.ValidationMessageFor(m => m.RoleId, null, new { @class = "text-danger" })
+
+    <br />
+    <br />
+    <button class="btn btn-success" action="post" type="submit">Modifica utilizatorul</button>
+
+    @Html.Hidden("Id", Model.Id)
+}

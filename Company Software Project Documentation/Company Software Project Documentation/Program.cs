@@ -1,5 +1,6 @@
 using Company_Software_Project_Documentation.Data;
 using Company_Software_Project_Documentation.Models;
+using Company_Software_Project_Documentation.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     );
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<UserService>(); // Add the user service to the DI container (current context)
 
 var app = builder.Build();
 
