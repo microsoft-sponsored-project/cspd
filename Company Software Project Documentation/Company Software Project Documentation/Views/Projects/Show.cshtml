@@ -28,6 +28,13 @@
     @Html.Partial("ArticleCard", article)
     <br />
 }
+@if (Model.Articles.Count() == 0)
+{
+    <div class="text-center">
+        <p style="font-size: 20px; color: #777;">Oops! Se pare ca acest proiect nu are articole inca.</p>
+        <p style="font-size: 24px; color: #333;">Timpul pentru creativitate!</p>
+    </div>
+}
 <br />
 <br />
 

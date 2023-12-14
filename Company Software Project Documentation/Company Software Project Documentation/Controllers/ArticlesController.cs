@@ -26,7 +26,7 @@ namespace Company_Software_Project_Documentation.Controllers
             _roleManager = roleManager;
         }
 
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "Guest,Editor,Admin")]
         public IActionResult Index()
         {
             var articles = _context.Articles
@@ -40,10 +40,11 @@ namespace Company_Software_Project_Documentation.Controllers
                 ViewBag.message = TempData["message"];
                 ViewBag.alert = TempData["messageType"];
             }
+            SetAccessRights();
             return View(articles);
         }
 
-        [Authorize(Roles = "User,Editor,Admin")]
+        [Authorize(Roles = "Guest,Editor,Admin")]
         [HttpGet]
         public IActionResult Show(int id)
         {
@@ -133,6 +134,7 @@ namespace Company_Software_Project_Documentation.Controllers
             {
                 TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui articol care nu va apartine";
                 TempData["messageType"] = "alert-danger";
+                SetAccessRights();
                 return RedirectToAction("Index");
             }
         }
@@ -155,12 +157,14 @@ namespace Company_Software_Project_Documentation.Controllers
 
                         _context.SaveChanges();
                         TempData["message"] = "Articolul a fost modificat!";
+                        SetAccessRights();
                         return RedirectToAction("Index");
                     }
                     else
                     {
                         TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui articol care nu va apartine";
                         TempData["messageType"] = "alert-danger";
+                        SetAccessRights();
                         return RedirectToAction("Index");
                     }
                 }
@@ -174,6 +178,7 @@ namespace Company_Software_Project_Documentation.Controllers
             catch (DbUpdateException e)
             {
                 TempData["message"] = "Eroare la modificarea articolului! DBUpdateException";
+                SetAccessRights();
                 return View(article);
             }
         }
@@ -194,23 +199,27 @@ namespace Company_Software_Project_Documentation.Controllers
                     _context.SaveChanges();
 
                     TempData["message"] = "Articolul a fost sters!";
+                    SetAccessRights();
                     return RedirectToAction("Index");
                 }
                 else
                 {
                     TempData["message"] = "Nu aveti dreptul sa stergeti un articol care nu va apartine";
                     TempData["messageType"] = "alert-danger";
+                    SetAccessRights();
                     return RedirectToAction("Index");
                 }
             }
             catch (DbUpdateException e)
             {
                 TempData["message"] = "Eroare la adaugarea articolului. DBUpdateException";
+                SetAccessRights();
                 return RedirectToAction("Index");
             }
             catch (Exception e)
             {
                 TempData["message"] = "Alta eroare la stergere";
+                SetAccessRights();
                 return RedirectToAction("Index");
             }
         }
@@ -221,7 +230,6 @@ namespace Company_Software_Project_Documentation.Controllers
         public IActionResult New()
         {
             Article article = new Article();
-            article.ProjectId = -1;
             ViewBag.Projects = GetAllProjects();
             return View(article);
         }
@@ -235,6 +243,7 @@ namespace Company_Software_Project_Documentation.Controllers
             article.UserId = _userManager.GetUserId(User);
             article.User = _context.Users.Find(article.UserId);
             article.Project = _context.Projects.Find(article.ProjectId);
+            ViewBag.Projects = GetAllProjects();
 
             try
             {
@@ -255,6 +264,7 @@ namespace Company_Software_Project_Documentation.Controllers
             catch (DbUpdateException e)
             {
                 TempData["message"] = "Eroare la adaugarea articolului, DBUpdateException";
+                SetAccessRights();
                 return RedirectToAction("Index");
             }
         }

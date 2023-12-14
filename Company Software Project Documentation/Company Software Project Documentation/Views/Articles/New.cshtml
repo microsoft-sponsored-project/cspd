@@ -1,6 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@* For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860 *@
 @{
 }
 
@@ -18,10 +16,10 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-6 offset-3">
-            @using (Html.BeginForm(actionName: "New", controllerName:
-            "Articles"))
+            @using (Html.BeginForm(actionName: "New", controllerName: "Articles"))
             {
                 @Html.ValidationSummary()
+
                 @Html.Label("Title", "Titlu Articol")
                 <br />
                 @Html.TextBox("Title", null, new { @class = "form-control" })
@@ -32,22 +30,25 @@
                 @Html.Label("Content", "Continut Articol")
                 <br />
                 @Html.TextArea("Content", null, new { @class = "form-control" })
-                @Html.ValidationMessage("Content", null, new
-                    {
-                        @class =
-                         "text-danger"
-                    })
+                @Html.ValidationMessage("Content", null, new { @class = "text-danger" })
                 <br />
+
                 <br />
                 <label>Selectati proiectul din care sa faca parte articolul</label>
 
-                @Html.DropDownListFor(m => m.ProjectId, new
-                    SelectList(ViewBag.Projects, "Value", "Text"), // Select only the projects that the current user has access to
-                    "Selectati proiectul", new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.ProjectId, null, new
-                    {
-                    @class = "text-danger" })
-                <br /><br />
+                @if (ViewBag.Projects != null)
+                {
+                    @Html.DropDownListFor(m => m.ProjectId, new SelectList(ViewBag.Projects, "Value", "Text"), "Selectati proiectul", new { @class = "form-control" })
+                }
+                else
+                {
+                    <p class="text-danger">No projects available.</p>
+                }
+
+                @Html.ValidationMessageFor(m => m.ProjectId, null, new { @class = "text-danger" })
+                <br />
+
+                <br />
 
                 <button class="btn btn-success" action="post" type="submit">Adauga articolul</button>
 

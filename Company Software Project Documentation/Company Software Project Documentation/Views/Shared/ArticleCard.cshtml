@@ -1,31 +1,36 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@* For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860 *@
 @model Company_Software_Project_Documentation.Models.Article;
 
-<div class="card">
+<div class="card border-primary mb-3">
     <div class="card-body">
         <h5 class="card-title">@Model.Title</h5>
         <p class="card-text">@Model.Content</p>
-        <p class="card-text">@Model.DateTime</p>
-        <p class="card-text">Part of the project: @Model.Project?.Title?.ToString() </p>
+        <p class="card-text"><small class="text-muted">@Model.DateTime</small></p>
+        <p class="card-text">Part of the project: <span class="badge bg-success">@Model.Project?.Title?.ToString()</span></p>
 
         @if (Model.User != null)
         {
             <strong><i class="bi bi-person"></i>Publicat de: @Model.User.ToString()</strong>
         }
 
-        <br/>
-        <br/>
+        <br />
+        <br />
 
-        @if (ViewBag.afisareButoane != null && ViewBag.afisareButoane == true && Model.UserId == ViewBag.userCurent || ViewBag.esteAdmin == true)
+        @if (ViewBag.afisareButoane != null && ViewBag.afisareButoane == true)
         {
-            <a href="@Url.Action("Edit", "Articles", new { id = Model.Id })" class="btn btn-primary">Edit</a>
-
-            <form method="post" action="/Articles/Delete/@Model.Id" class="d-inline">
-                <button class="btn btn-danger" type="submit">Sterge Articol</button>
-            </form>
+            <div class="btn-group" role="group">
+                @if (Model.UserId == ViewBag.userCurent || ViewBag.esteAdmin == true)
+                {
+                    <a href="@Url.Action("Edit", "Articles", new { id = Model.Id })" class="btn btn-outline-primary">Edit</a>
+                    <div class="mx-1"></div>
+                    <form method="post" action="/Articles/Delete/@Model.Id" class="d-inline">
+                        <button class="btn btn-outline-danger" type="submit">Sterge Articol</button>
+                    </form>
+                    <div class="mx-1"></div>
+                }
+            </div>
         }
+        <!-- Add "Arata continut" button here -->
+        <a href="@Url.Action("Show", "Articles", new { id = Model.Id })" class="btn btn-outline-info">Arata continutul</a>
     </div>
 </div>

@@ -1,31 +1,67 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Company_Software_Project_Documentation.Models.Project
 
-@model Company_Software_Project_Documentation.Models.Project
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card stylish-card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">@Model.Title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@Model.Description</h6>
 
-<div class="card" style="width: 100%;">
-    <div class="card-body">
-        <h5 class="card-title">@Model.Title</h5>
-        <h6 class="card-subtitle mb-2 text-muted">@Model.Description</h6>
-        <span class="alert-success">
-            <p class="card-text">@Model.DateTime</p>
-        </span>
-        <br />
-        <br />
-        <p class="card-text">Created by: @Model.User?.ToString() </p>
+                    <p class="card-text alert alert-success">@Model.DateTime.ToShortDateString()</p>
 
+                    <p class="card-text">Created by: @Model.User?.ToString()</p>
 
-        <a href="@Url.Action("Show", "Projects", new { id = Model.Id })" class="btn btn-primary">Details</a>
+                    <a href="@Url.Action("Show", "Projects", new { id = Model.Id })" class="btn btn-primary btn-details">Details</a>
 
-        @if (ViewBag.afisareButoane != null && ViewBag.afisareButoane == true && Model.UserId == ViewBag.userCurent || ViewBag.esteAdmin == true)
-        {
-            <a href="@Url.Action("Edit", "Projects", new { id = Model.Id })" class="btn btn-primary">Edit</a>
+                    @if (ViewBag.afisareButoane != null && ViewBag.afisareButoane == true && Model.UserId == ViewBag.userCurent || ViewBag.esteAdmin == true)
+                    {
+                        <a href="@Url.Action("Edit", "Projects", new { id = Model.Id })" class="btn btn-warning btn-edit">Edit</a>
 
-            <form method="post" action="/Projects/Delete/@Model.Id" class="d-inline">
-                <button class="btn btn-danger" type="submit">Sterge Proiect</button>
-            </form>
-        }
-
+                        <form method="post" action="/Projects/Delete/@Model.Id" class="d-inline">
+                            <button class="btn btn-danger btn-delete" type="submit">Delete Project</button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<style>
+    body {
+        background-color: #f8f9fa; /* Light gray background */
+    }
+
+    .stylish-card {
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s;
+    }
+
+        .stylish-card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+    .btn-details,
+    .btn-edit,
+    .btn-delete {
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        .btn-details:hover {
+            background-color: #007bff; /* Blue color on hover */
+            color: #fff;
+        }
+
+        .btn-edit:hover {
+            background-color: #ffc107; /* Yellow color on hover */
+            color: #212529;
+        }
+
+        .btn-delete:hover {
+            background-color: #dc3545; /* Red color on hover */
+            color: #fff;
+        }
+</style>

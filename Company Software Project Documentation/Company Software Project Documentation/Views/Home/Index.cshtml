@@ -2,19 +2,65 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+
 @{
     ViewData["Title"] = "Company Software Project Documentation";
 }
 
-@model RegisterModel
-
-<!-- Bootstrap CSS -->
+<!-- External Styles -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 <style>
     .jumbotron {
         background: linear-gradient(to right, #56CCF2, #2F80ED);
         color: #fff;
     }
+
+    /* Centered Login View Styles */
+    .login-view {
+        width: 300px;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    /* Logged In View Styles */
+    .logged-in-view {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+        .logged-in-view button {
+            margin: 0 10px;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #28a745; /* Stylish green color for buttons */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+    /* Add margin to the bottom of each article card in the second column */
+    .col-md-6:not(:first-child) .card {
+        margin-top: 20px;
+    }
+
+    .custom-button {
+        color: #fff;
+        background-color: #28a745; /* Green background color */
+        border: 2px solid #218838; /* Darker green border color */
+        border-radius: 5px;
+        transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+    }
+
+        .custom-button:hover {
+            background-color: #218838; /* Darker green on hover */
+            border-color: #1e7e34; /* Darker border color on hover */
+            color: #fff;
+        }
 </style>
 
 <!-- Page Content -->
@@ -25,73 +71,65 @@
     </div>
 
     <!-- Top 5 Recent Articles -->
-    @for (var i = 0; i < ViewBag.Articles.Count; i += 2)
+    @if (ViewBag.Articles != null && ViewBag.Articles.Count > 0)
     {
-        <div class="row">
-            <div class="col-md-6">
-                @Html.Partial("ArticleCard", (Company_Software_Project_Documentation.Models.Article)ViewBag.Articles[i])
-            </div>
-
-            @if (i + 1 < ViewBag.Articles.Count)
-            {
-                <div class="col-md-6">
-                    @Html.Partial("ArticleCard", (Company_Software_Project_Documentation.Models.Article)ViewBag.Articles[i + 1])
+        for (var i = 0; i < ViewBag.Articles.Count; i += 2)
+        {
+            <div class="row">
+                <div class="col-md-6 mb-4"> <!-- Added margin-bottom class -->
+                    @Html.Partial("ArticleCard", (Company_Software_Project_Documentation.Models.Article)ViewBag.Articles[i])
                 </div>
-            }
+
+                @if (i + 1 < ViewBag.Articles.Count)
+                {
+                    <div class="col-md-6 mb-4"> <!-- Added margin-bottom class -->
+                        @Html.Partial("ArticleCard", (Company_Software_Project_Documentation.Models.Article)ViewBag.Articles[i + 1])
+                    </div>
+                }
+                else
+                {
+                    <!-- If the last iteration has only one article, add an empty column for spacing -->
+                    <div class="col-md-6 mb-4"></div>
+                }
+            </div>
+        }
+    }
+    else
+    {
+        <div class="text-center mt-4">
+            <h4>No articles available at the moment.</h4>
+            <!-- You can add additional styling or information here as needed -->
+        </div>
+    }
+
+    <!-- Check if the user is logged in -->
+    @if (!SignInManager.IsSignedIn(User))
+    {
+        <div class="login-view">
+            <h2>Register</h2>
+            <form asp-controller="Home" asp-action="OnPost" method="post">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="text" class="form-control" id="email" name="Input.Email" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" class="form-control" id="password" name="Input.Password" placeholder="Enter your password">
+                </div>
+                <div class="form-group">
+                    <label for="confirmpassword">Confirm Password:</label>
+                    <input type="password" class="form-control" id="confirmpassword" name="Input.ConfirmPassword" placeholder="Enter your password once again">
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+        </div>
+    }
+    else
+    {
+        <!-- If logged in, show stylish buttons for all projects and all articles -->
+        <div class="logged-in-view">
+            <a href="/Projects/Index" class="btn btn-success btn-lg custom-button mr-2">Explore All Projects</a>
+            <a href="/Articles/Index" class="btn btn-info btn-lg custom-button">Discover All Articles</a>
         </div>
     }
 </div>
-@* 
-@if (!SignInManager.IsSignedIn(User))
-{
-    <div class="row">
-        <div class="col-md-4">
-            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                <h2>Create a new account.</h2>
-                <hr />
-                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                    <label asp-for="Input.Email">Email</label>
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                    <label asp-for="Input.Password">Password</label>
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                    <label asp-for="Input.ConfirmPassword">Confirm Password</label>
-                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-                </div>
-                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-            </form>
-        </div>
-    </div>
-}  *@
-
-@if (!SignInManager.IsSignedIn(User))
-{
-    <div class="row">
-        <div class="col-md-4">
-            <form id="loginForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                <h2>Login to your account.</h2>
-                <hr />
-                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                    <label asp-for="Input.Email">Email</label>
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
-                    <label asp-for="Input.Password">Password</label>
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
-                </div>
-                <button id="loginSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Login</button>
-            </form>
-        </div>
-    
-    </div>
-}
