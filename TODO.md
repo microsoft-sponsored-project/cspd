@@ -1,6 +1,6 @@
 - [x] Sa existe 3 tipuri de utilizatori: vizitator neinregistrat, utilizator inregistrat
 (Editor) si administrator. (0.5p)
-- [ ] Utilizatorii neinregistrati pot sa vada pagina de prezentare a platformei, unde
+- [x] Utilizatorii neinregistrati pot sa vada pagina de prezentare a platformei, unde
 vor aparea articolele cele mai recente, indiferent de proiect, impreuna cu
 formularele de autentificare si inregistrare. Articolele cele mai recente sunt
 cele la care s-a lucrat recent (unde au aparut modificari recente) (0.5p).

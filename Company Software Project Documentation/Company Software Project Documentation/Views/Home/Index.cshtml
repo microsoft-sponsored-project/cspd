@@ -7,6 +7,29 @@
     ViewData["Title"] = "Company Software Project Documentation";
 }
 
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="text-center">
+        <h4>You are logged in as @UserManager.GetUserName(User).</h4>
+    </div>
+}
+
+@if (ViewBag.message != null)
+{
+    <div class="alert @ViewBag.Alert" role="alert">
+        @ViewBag.message
+    </div>
+}
+
+@if (TempData["shortMessage"] != null)
+{
+    <div class="alert @TempData["Alert"]" role="alert">
+        @TempData["shortMessage"]
+    </div>
+}
+
+@model Company_Software_Project_Documentation.Models.LoginAndRegisterViewModel
+
 <!-- External Styles -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 <style>
@@ -105,24 +128,60 @@
     <!-- Check if the user is logged in -->
     @if (!SignInManager.IsSignedIn(User))
     {
-        <div class="login-view">
-            <h2>Register</h2>
-            <form asp-controller="Home" asp-action="OnPost" method="post">
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="text" class="form-control" id="email" name="Input.Email" placeholder="Enter your email">
+        <form asp-controller="Home" asp-action="Register" method="post">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="RegisterModel.Email"></label>
+                <input asp-for="RegisterModel.Email" class="form-control" />
+                <span asp-validation-for="RegisterModel.Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="RegisterModel.Password"></label>
+                <input asp-for="RegisterModel.Password" type="password" class="form-control" />
+                <span asp-validation-for="RegisterModel.Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="RegisterModel.ConfirmPassword"></label>
+                <input asp-for="RegisterModel.ConfirmPassword" type="password" class="form-control" />
+                <span asp-validation-for="RegisterModel.ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+        <br />
+        <br />
+        <h2>Already have an account? Login</h2>
+        <form asp-controller="Home" asp-action="Login" method="post">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="LoginModel.Email"></label>
+                <input asp-for="LoginModel.Email" class="form-control" />
+                <span asp-validation-for="LoginModel.Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="LoginModel.Password"></label>
+                <input asp-for="LoginModel.Password" type="password" class="form-control" />
+                <span asp-validation-for="LoginModel.Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <div class="form-check">
+                    <input asp-for="LoginModel.RememberMe" class="form-check-input" />
+                    <label class="form-check-label" asp-for="LoginModel.RememberMe">Remember me</label>
                 </div>
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" class="form-control" id="password" name="Input.Password" placeholder="Enter your password">
-                </div>
-                <div class="form-group">
-                    <label for="confirmpassword">Confirm Password:</label>
-                    <input type="password" class="form-control" id="confirmpassword" name="Input.ConfirmPassword" placeholder="Enter your password once again">
-                </div>
-                <button type="submit" class="btn btn-primary">Register</button>
-            </form>
-        </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
     }
     else
     {
@@ -133,3 +192,7 @@
         </div>
     }
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

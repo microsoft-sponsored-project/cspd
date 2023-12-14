@@ -172,17 +172,69 @@ namespace Company_Software_Project_Documentation.Controllers
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(LoginAndRegisterViewModel model)
         {
-            returnUrl ??= Url.Content("~/");
+            if (ModelState.IsValid || true)
+            {
+                var user = new ApplicationUser { UserName = model.RegisterModel.Email, Email = model.RegisterModel.Email };
+                var result = await _userManager.CreateAsync(user, model.RegisterModel.Password);
+
+                if (result.Succeeded)
+                {
+                    // You can customize this part based on your application needs
+                    await _userManager.AddToRoleAsync(user, "Guest");
+
+                    // Sign in the user after registration
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    // Redirect to the homepage or any other desired page
+                    return RedirectToAction("Index", "Home");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            // If registration fails, return to the registration view with the model
+            TempData["shortMessage"] = "Datele introduse nu sunt corecte! Inregistrarea a esuat";
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginAndRegisterViewModel model)
+        {
+            if (ModelState.IsValid || true)
+            {
+                var result = await _signInManager.PasswordSignInAsync(model.LoginModel.Email, model.LoginModel.Password, model.LoginModel.RememberMe, lockoutOnFailure: false); // True = RememberMe
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            }
+
+            TempData["shortMessage"] = "Datele introduse nu sunt corecte! Logarea a esuat";
+            return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> OnPostAsync([FromForm] RegisterViewModel regViewModel)
+        {
+            string returnUrl = Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                await _userStore.SetUserNameAsync(user, regViewModel.Email, CancellationToken.None);
+                await _emailStore.SetEmailAsync(user, regViewModel.Email, CancellationToken.None);
+                var result = await _userManager.CreateAsync(user, regViewModel.Password);
 
                 if (result.Succeeded)
                 {
@@ -194,7 +246,7 @@ namespace Company_Software_Project_Documentation.Controllers
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
+                        "/Identity/Account/ConfirmEmail",
                         pageHandler: null,
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
@@ -204,7 +256,7 @@ namespace Company_Software_Project_Documentation.Controllers
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
-                        return RedirectToPage("/RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                        return RedirectToPage("/Identity/Account/RegisterConfirmation", new { email = regViewModel.Email, returnUrl = returnUrl });
                     }
                     else
                     {
