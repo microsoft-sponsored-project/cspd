@@ -176,7 +176,10 @@ namespace Company_Software_Project_Documentation.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(LoginAndRegisterViewModel model)
         {
-            if (ModelState.IsValid || true)
+            if (ModelState["RegisterModel.Email"].Errors.Count == 0 &&
+                ModelState["RegisterModel.Password"].Errors.Count == 0 &&
+                ModelState["RegisterModel.ConfirmPassword"].Errors.Count == 0)
+            
             {
                 var user = new ApplicationUser { UserName = model.RegisterModel.Email, Email = model.RegisterModel.Email };
                 var result = await _userManager.CreateAsync(user, model.RegisterModel.Password);
@@ -198,6 +201,10 @@ namespace Company_Software_Project_Documentation.Controllers
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
+            else {
+                TempData["shortMessage"] = "Inregistrarea a esuat, formular invalid";
+                return RedirectToAction("Index", "Home");
+            }
 
             // If registration fails, return to the registration view with the model
             TempData["shortMessage"] = "Datele introduse nu sunt corecte! Inregistrarea a esuat";
@@ -208,7 +215,9 @@ namespace Company_Software_Project_Documentation.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginAndRegisterViewModel model)
         {
-            if (ModelState.IsValid || true)
+            if (ModelState["LoginModel.Email"].Errors.Count == 0 
+                && ModelState["LoginModel.Password"].Errors.Count == 0
+                && ModelState["LoginModel.RememberMe"].Errors.Count == 0)
             {
                 var result = await _signInManager.PasswordSignInAsync(model.LoginModel.Email, model.LoginModel.Password, model.LoginModel.RememberMe, lockoutOnFailure: false); // True = RememberMe
 
@@ -218,6 +227,10 @@ namespace Company_Software_Project_Documentation.Controllers
                 }
 
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            }
+            else {
+                TempData["shortMessage"] = "Logarea a esuat, formular invalid";
+                return RedirectToAction("Index", "Home");
             }
 
             TempData["shortMessage"] = "Datele introduse nu sunt corecte! Logarea a esuat";

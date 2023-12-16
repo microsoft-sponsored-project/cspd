@@ -61,17 +61,11 @@ namespace Company_Software_Project_Documentation.Controllers
                 }
                 else
                 {
-                    // Handle the case where the role is not found
-                    // You may want to log a warning or take other appropriate actions
-                    // For now, setting RoleId to a default value
                     userDto.RoleId = "DefaultRoleId";
                 }
             }
             else
             {
-                // Handle the case where the user is not found
-                // You may want to redirect to an error page or take other appropriate actions
-                // For now, you can return a NotFound result
                 return NotFound();
             }
 

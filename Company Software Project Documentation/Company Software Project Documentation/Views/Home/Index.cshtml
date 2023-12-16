@@ -128,7 +128,7 @@
     <!-- Check if the user is logged in -->
     @if (!SignInManager.IsSignedIn(User))
     {
-        <form asp-controller="Home" asp-action="Register" method="post">
+        <form asp-controller="Home" asp-action="Register" method="post" id="registerForm">
             @Html.AntiForgeryToken()
 
             <div asp-validation-summary="All" class="text-danger"></div>
@@ -156,7 +156,7 @@
         <br />
         <br />
         <h2>Already have an account? Login</h2>
-        <form asp-controller="Home" asp-action="Login" method="post">
+        <form asp-controller="Home" asp-action="Login" method="post" id="loginForm">
             @Html.AntiForgeryToken()
 
             <div asp-validation-summary="All" class="text-danger"></div>
@@ -180,7 +180,8 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">Login</button>
+            <button type="submit" class="btn btn-primary">Log In</button>
+
         </form>
     }
     else
@@ -191,7 +192,10 @@
             <a href="/Articles/Index" class="btn btn-info btn-lg custom-button">Discover All Articles</a>
         </div>
     }
+
+
 </div>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
