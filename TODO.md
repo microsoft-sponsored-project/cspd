@@ -6,7 +6,7 @@ formularele de autentificare si inregistrare. Articolele cele mai recente sunt
 cele la care s-a lucrat recent (unde au aparut modificari recente) (0.5p).
 - [x] Utilizatorii inregistrati (Editorii) se ocupa de publicarea proiectelor. Un
 proiect contine titlu si descriere – fiind campuri obligatorii (0.5p).
-- [ ] In cadrul proiectului, specificatiile acestuia se scriu sub forma de articole.
+- [x] In cadrul proiectului, specificatiile acestuia se scriu sub forma de articole.
 Un articol poate fi scris folosind un limbaj de markup (0.5p).
 - [x] Fiecare articol apartine unui proiect si este format din titlu, continut si data la care a fost
 creat, continutul reprezentand specificatiile detaliate ale proiectului (0.5p).

@@ -4,7 +4,7 @@
 <div class="card border-primary mb-3">
     <div class="card-body">
         <h5 class="card-title">@Model.Title</h5>
-        <p class="card-text">@Model.Content</p>
+        <p class="card-text">@Html.Raw(Model.ParseReadmeContent())</p>
         <p class="card-text"><small class="text-muted">@Model.DateTime</small></p>
         <p class="card-text">Part of the project: <span class="badge bg-success">@Model.Project?.Title?.ToString()</span></p>
 

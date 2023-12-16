@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Markdig;
 
 namespace Company_Software_Project_Documentation.Models
 {
@@ -31,5 +32,14 @@ namespace Company_Software_Project_Documentation.Models
         // The category we want the article to be in and the list of comments
         public virtual Project? Project { get; set; }
 
+        public string ParseReadmeContent()
+        {
+            if (!string.IsNullOrEmpty(Content))
+            {
+                return Markdown.ToHtml(Content);
+            }
+
+            return string.Empty;
+        }
     }
 }

@@ -5,6 +5,7 @@
 }
 
 @model Company_Software_Project_Documentation.Models.Article
+@using System.Text.Json
 
 @if (ViewBag.Message != null)
 {
@@ -12,6 +13,15 @@
         @ViewBag.Message
     </div>
 }
+
+<script defer>
+    document.addEventListener("DOMContentLoaded", function () {
+        var simplemde = new SimpleMDE({
+            element: document.getElementById("Content"),
+            spellChecker: false,
+        });
+    });
+</script>
 
 @using (Html.BeginForm(actionName: "Edit", controllerName:
     "Articles", routeValues: new { id = Model.Id }))
@@ -24,6 +34,7 @@
     <br /><br />
     @Html.Label("Content", "Continut Articol")
     <br />
+   
     @Html.TextArea("Content", null, new { @class = "form-control" })
     @Html.ValidationMessage("Content", null, new { @class =
         "text-danger" })

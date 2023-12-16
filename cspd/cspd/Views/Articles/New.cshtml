@@ -27,11 +27,15 @@
                 <br />
 
                 <br />
+                <br />
                 @Html.Label("Content", "Continut Articol")
                 <br />
                 @Html.TextArea("Content", null, new { @class = "form-control" })
-                @Html.ValidationMessage("Content", null, new { @class = "text-danger" })
-                <br />
+                @Html.ValidationMessage("Content", null, new
+                    {
+                        @class =
+                         "text-danger"
+                    })
 
                 <br />
                 <label>Selectati proiectul din care sa faca parte articolul</label>
@@ -57,3 +61,12 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var simplemde = new SimpleMDE({
+            element: document.getElementById("Content"),
+            spellChecker: false,
+        });
+    });
+</script>
