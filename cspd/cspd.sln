@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Company Software Project Documentation", "Company Software Project Documentation\Company Software Project Documentation.csproj", "{7F60ABED-ED83-41B0-A26E-AE77E001B4F6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cspd", "cspd\cspd.csproj", "{7F60ABED-ED83-41B0-A26E-AE77E001B4F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
