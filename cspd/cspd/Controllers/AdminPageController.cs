@@ -76,18 +76,47 @@ namespace Company_Software_Project_Documentation.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public IActionResult EditUser(UserDTO userDto)
+        public async Task<IActionResult> EditUser(UserDTO userDto)
         {
-            var user = _userManager.FindByIdAsync(userDto.Id).Result;
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            var user = await _userManager.FindByIdAsync(userDto.Id);
+            var role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
             if (role != null)
             {
-                _userManager.RemoveFromRoleAsync(user, role);
+                await _userManager.RemoveFromRoleAsync(user, role);
             }
 
-            _userManager.AddToRoleAsync(user, userDto.Role);
+            var newRole = await _roleManager.FindByIdAsync(userDto.RoleId);
+            if (newRole != null)
+            {
+                await _userManager.AddToRoleAsync(user, newRole.Name);
+            }
+
             return RedirectToAction("Index");
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("EditUser", new { id });
+            }
+        }
+
 
         [NonAction]
         public IEnumerable<SelectListItem> GetAllRolesFromDatabase()

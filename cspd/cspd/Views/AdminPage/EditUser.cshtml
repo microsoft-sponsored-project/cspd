@@ -1,10 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
-@model Company_Software_Project_Documentation.Models.UserDTO
+﻿@model Company_Software_Project_Documentation.Models.UserDTO
 
 @if (ViewBag.Message != null)
 {
@@ -16,8 +10,7 @@
 <h2 class="text-center mt-5">Editare utilizator</h2>
 <br />
 
-@using(Html.BeginForm(actionName: "EditUser", controllerName:
-"AdminPage", routeValues: new { id = Model.Id }))
+@using (Html.BeginForm(actionName: "EditUser", controllerName: "AdminPage", routeValues: new { id = Model.Id }))
 {
     @Html.ValidationSummary()
 
@@ -45,7 +38,12 @@
 
     <br />
     <br />
-    <button class="btn btn-success" action="post" type="submit">Modifica utilizatorul</button>
 
+    <button class="btn btn-success" action="post" type="submit">Modifica utilizatorul</button>
     @Html.Hidden("Id", Model.Id)
 }
+
+<form style="display: padding: 12px 16px" asp-action="DeleteUser" asp-route-id="@Model.Id" method="post" onsubmit="return confirm('Are you sure you want to delete this user?');">
+    @Html.Hidden("Id", Model.Id)
+    <button type="submit" class="btn btn-danger">Sterge User</button>
+</form>
