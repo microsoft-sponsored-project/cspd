@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Ganss.Xss;
 
 namespace Company_Software_Project_Documentation.Controllers
 {
@@ -102,44 +103,6 @@ namespace Company_Software_Project_Documentation.Controllers
             ViewBag.esteEditor = User.IsInRole("Editor");
             ViewBag.userCurent = _userManager.GetUserId(User);
         }
-
-
-     /*   // Toate rolurile pot adauga comentarii
-        [HttpPost]
-        [Authorize(Roles = "User,Editor,Admin")]
-        public IActionResult Show([FromForm] Comment comment)
-        {
-            Comment comm = new Comment();
-
-            comm.UserId = _userManager.GetUserId(User);
-            comm.ArticleId = comment.ArticleId;
-            comm.content = comment.content;
-            comm.Date = DateTime.Now;
-            comm.User = _context.Users.Find(comm.UserId);
-
-            if (comm.content != null)
-            {
-                TempData["message"] = "Comentariul a fost adaugat!";
-                _context.Comments.Add(comment);
-                _context.SaveChanges();
-                return Redirect("/Articles/Show/" +
-                                comment.ArticleId);
-            }
-
-            else
-            {
-                TempData["message"] = "Eroare la adaugarea comentariului!";
-                Article art =
-                    _context.Articles.Include("Category").Include("Comments").Include("Comments").Include("Comments.User")
-                        .Where(art => art.Id ==
-                                      comment.ArticleId).First();
-
-                SetAccessRights();
-
-                return View(art);
-            }
-        } */
-
        
         [Authorize(Roles = "Editor,Admin")]
         [HttpGet]
@@ -171,6 +134,8 @@ namespace Company_Software_Project_Documentation.Controllers
             Article article = _context.Articles.Include(art => art.Project).Include(art => art.User)
                 .Where(art => art.Id == id).First();
 
+            var sanitizer = new HtmlSanitizer();
+
             try
             {
                 if (ModelState.IsValid)
@@ -178,7 +143,7 @@ namespace Company_Software_Project_Documentation.Controllers
                     if (article.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
                     {
                         article.Title = requestArticle.Title;
-                        article.Content = requestArticle.Content;
+                        article.Content = sanitizer.Sanitize(requestArticle.Content);
                         article.DateTime = DateTime.Now; // Actualizam data modificarii in mod dinamic
 
                         _context.SaveChanges();
@@ -271,10 +236,14 @@ namespace Company_Software_Project_Documentation.Controllers
             article.Project = _context.Projects.Find(article.ProjectId);
             ViewBag.Projects = GetAllProjects();
 
+            var sanitizer = new HtmlSanitizer();
+
             try
             {
                 if (ModelState.IsValid)
                 {
+                    article.Content = sanitizer.Sanitize(article.Content);
+
                     _context.Articles.Add(article);
                     _context.SaveChanges();
                     TempData["message"] = "Articolul a fost adaugat!";

@@ -14,15 +14,6 @@
     </div>
 }
 
-<script defer>
-    document.addEventListener("DOMContentLoaded", function () {
-        var simplemde = new SimpleMDE({
-            element: document.getElementById("Content"),
-            spellChecker: false,
-        });
-    });
-</script>
-
 @using (Html.BeginForm(actionName: "Edit", controllerName:
     "Articles", routeValues: new { id = Model.Id }))
 {
@@ -35,7 +26,7 @@
     @Html.Label("Content", "Continut Articol")
     <br />
    
-    @Html.TextArea("Content", null, new { @class = "form-control" })
+    @Html.TextArea("Content", null, new { @class = "summernote" })
     @Html.ValidationMessage("Content", null, new { @class =
         "text-danger" })
 
