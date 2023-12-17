@@ -33,7 +33,7 @@ catre administrator. (1.0p)
 - [x] In acelasi timp articolele pot fi cautate prin intermediul unui motor de
 cautare propriu. Cautarea se va face dupa cuvinte cheie aflate in titlu si/sau
 in descriere (1.0p).
-- [ ] Administratorii se ocupa si de buna functionare a intregii aplicatii (ex: pot
+- [x] Administratorii se ocupa si de buna functionare a intregii aplicatii (ex: pot
 face CRUD pe articole si proiecte – cerinta este deja prezenta).
 In plus, administratorul poate activa sau revoca drepturile utilizatorilor si
 editorilor si poate sterge utilizatori (0.5p)
