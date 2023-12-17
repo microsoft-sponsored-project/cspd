@@ -30,7 +30,7 @@ respectiva, articolul revenind la forma anterioara. (1.0p)
 utilizatorului care a publicat articolul. Restrictionarea poate fi impusa de
 catre administrator. (1.0p)
 
-- [ ] In acelasi timp articolele pot fi cautate prin intermediul unui motor de
+- [x] In acelasi timp articolele pot fi cautate prin intermediul unui motor de
 cautare propriu. Cautarea se va face dupa cuvinte cheie aflate in titlu si/sau
 in descriere (1.0p).
 - [ ] Administratorii se ocupa si de buna functionare a intregii aplicatii (ex: pot

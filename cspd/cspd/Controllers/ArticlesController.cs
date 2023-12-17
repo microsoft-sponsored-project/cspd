@@ -29,18 +29,44 @@ namespace Company_Software_Project_Documentation.Controllers
         [Authorize(Roles = "Guest,Editor,Admin")]
         public IActionResult Index()
         {
-            var articles = _context.Articles
-                .Include(a => a.User)
-                .Include(a => a.Project)
-                .ToList();
+            var articles = new List<Article>();
 
-            ViewBag.Articles = articles;
+            if (Convert.ToString(HttpContext.Request.Query["search"]) == null)
+            {
+                articles = _context.Articles
+                    .Include(a => a.User)
+                    .Include(a => a.Project)
+                    .ToList();
+
+                ViewBag.SearchString = "";
+            }
+            else
+            {
+                var search = Convert.ToString(HttpContext.Request.Query["search"]).Trim();
+
+                List<int> articleIds = _context.Articles
+                    .Where(at => at.Title.Contains(search) ||
+                        at.Content.Contains(search))
+                    .Select(a => a.Id).ToList();
+
+                articles = _context.Articles
+                    .Where(a => articleIds.Contains(a.Id))
+                    .Include(a => a.User)
+                    .Include(a => a.Project)
+                    .ToList();
+
+                ViewBag.SearchString = search;
+            }
+
             if (TempData.ContainsKey("message"))
             {
                 ViewBag.message = TempData["message"];
                 ViewBag.alert = TempData["messageType"];
             }
+
+            ViewBag.Articles = articles;
             SetAccessRights();
+
             return View(articles);
         }
 

@@ -14,6 +14,17 @@
     </div>
 }
 
+<form method="GET">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control"
+               placeholder="Search topics or keywords" name="search"
+               value="@ViewBag.SearchString">
+        <button class="btn btn-outline-success"
+                type="submit">
+            Search
+        </button>
+    </div>
+</form>
 
 @foreach (Company_Software_Project_Documentation.Models.Article art in ViewBag.Articles)
 {
