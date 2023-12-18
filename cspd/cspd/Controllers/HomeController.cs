@@ -181,7 +181,11 @@ namespace Company_Software_Project_Documentation.Controllers
                 ModelState["RegisterModel.ConfirmPassword"].Errors.Count == 0)
             
             {
-                var user = new ApplicationUser { UserName = model.RegisterModel.Email, Email = model.RegisterModel.Email };
+                var user = new ApplicationUser { 
+                    UserName = model.RegisterModel.Email, 
+                    Email = model.RegisterModel.Email,
+                    EmailConfirmed = true
+                };
                 var result = await _userManager.CreateAsync(user, model.RegisterModel.Password);
 
                 if (result.Succeeded)
@@ -190,7 +194,7 @@ namespace Company_Software_Project_Documentation.Controllers
                     await _userManager.AddToRoleAsync(user, "Guest");
 
                     // Sign in the user after registration
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    await _signInManager.SignInAsync(user, isPersistent: true);
 
                     // Redirect to the homepage or any other desired page
                     return RedirectToAction("Index", "Home");
