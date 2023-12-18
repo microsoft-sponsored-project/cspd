@@ -21,13 +21,8 @@ namespace Company_Software_Project_Documentation.Models
         public DateTime DateTime { get; set; }
         public virtual IEnumerable<Article>? Articles { get; set; }
 
-        // PASUL 6 - useri si roluri
-        // Un articol este scris de un singur utilizator
         public string? UserId { get; set; }
 
-        // Un articol este scris de un singur utilizator
-        public virtual ApplicationUser? User { get; set; } // → un comentariu apartine unui singur utilizator
-
-
+        public virtual ApplicationUser? User { get; set; } 
     }
 }
