@@ -23,7 +23,7 @@ si articolele proprii (1.0p).
 
 - [x] Adminul are acces si poate face CRUD asupra
 tuturor proiectelor si articolelor existente in platforma. (1.0p)
-- [ ] Pentru fiecare articol se tine evidenta modificarilor aparute in timp. Daca un
+- [x] Pentru fiecare articol se tine evidenta modificarilor aparute in timp. Daca un
 admin constata o modificare rau intentionata, acesta poate sterge modificarea
 respectiva, articolul revenind la forma anterioara. (1.0p)
 - [x] Orice articol poate fi "protejat" prin restricitionarea accesului la editare a

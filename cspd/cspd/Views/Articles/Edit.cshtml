@@ -39,3 +39,40 @@
     @Html.Hidden("Project", Model.Project)
     @Html.Hidden("User", Model.User)
 }
+
+<br />
+
+<form method="post" action="/Articles/Delete/@Model.Id" class="d-inline">
+    <button class="btn btn-outline-danger" type="submit">Sterge Articol</button>
+</form>
+
+<br /> 
+<br />
+
+@if (User.IsInRole("Admin"))
+{
+    <h4>Revizii ale Articolului</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Data Reviziei</th>
+                <th>Conținut Revizie</th>
+                <th>Acțiuni</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var revision in Model.Revisions.OrderByDescending(r => r.RevisionDate))
+            {
+                <tr style="background-color: @(revision.Content == Model.Content ? "#add8e6" : "inherit")">
+                    <td>@revision.RevisionDate.ToString("g")</td>
+                    <td>@Html.Raw(revision.Content)</td>
+                    <td>
+                        <form method="post" action="@Url.Action("Revert", "Articles", new { articleId = Model.Id, revisionId = revision.Id })">
+                            <button type="submit" class="btn btn-sm btn-warning">Revert</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

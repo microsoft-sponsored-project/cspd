@@ -37,6 +37,7 @@ namespace Company_Software_Project_Documentation.Controllers
                 articles = _context.Articles
                     .Include(a => a.User)
                     .Include(a => a.Project)
+                    .Include(a => a.Revisions)
                     .ToList();
 
                 ViewBag.SearchString = "";
@@ -54,6 +55,7 @@ namespace Company_Software_Project_Documentation.Controllers
                     .Where(a => articleIds.Contains(a.Id))
                     .Include(a => a.User)
                     .Include(a => a.Project)
+                    .Include(a => a.Revisions)
                     .ToList();
 
                 ViewBag.SearchString = search;
@@ -76,8 +78,9 @@ namespace Company_Software_Project_Documentation.Controllers
         public IActionResult Show(int id)
         {
             var article = _context.Articles
-                .Include("User")
-                .Include("Project")
+                .Include(a => a.User)
+                .Include(a => a.Project)
+                .Include(a => a.Revisions)
                 .FirstOrDefault(a => a.Id == id);
 
             if (article == null)
@@ -119,6 +122,7 @@ namespace Company_Software_Project_Documentation.Controllers
             Article article = _context.Articles
                 .Include(a => a.Project)
                 .Include(a => a.User)
+                .Include(a => a.Revisions)
                 .Where(a => a.Id == id)
                 .First();
 
@@ -138,8 +142,12 @@ namespace Company_Software_Project_Documentation.Controllers
         [HttpPost]
         public IActionResult Edit(int id, Article requestArticle)
         {
-            Article article = _context.Articles.Include(art => art.Project).Include(art => art.User)
-                .Where(art => art.Id == id).First();
+            var article = _context.Articles
+                .Include(art => art.Project)
+                .Include(art => art.User)
+                .Include(art => art.Revisions)
+                .Where(art => art.Id == id)
+                .First();
 
             var sanitizer = new HtmlSanitizer();
 
@@ -153,6 +161,15 @@ namespace Company_Software_Project_Documentation.Controllers
                         article.Title = requestArticle.Title;
                         article.Content = sanitizer.Sanitize(requestArticle.Content);
                         article.DateTime = DateTime.Now; // Actualizam data modificarii in mod dinamic
+
+                        var revision = new ArticleRevision
+                        {
+                            Article = article,
+                            Content = article.Content,
+                            RevisionDate = article.DateTime
+                        };
+
+                        article.Revisions.Add(revision);
 
                         _context.SaveChanges();
                         TempData["message"] = "Articolul a fost modificat!";
@@ -252,7 +269,16 @@ namespace Company_Software_Project_Documentation.Controllers
                 {
                     article.Content = sanitizer.Sanitize(article.Content);
 
+                    var revision = new ArticleRevision
+                    {
+                        Article = article,
+                        Content = article.Content,
+                        RevisionDate = article.DateTime
+                    };
+
+                    article.Revisions.Add(revision);
                     _context.Articles.Add(article);
+
                     _context.SaveChanges();
                     TempData["message"] = "Articolul a fost adaugat!";
                     TempData["messageType"] = "alert-success"; // success, danger, warning, info
@@ -272,7 +298,41 @@ namespace Company_Software_Project_Documentation.Controllers
             }
         }
 
-       [NonAction]
+        [Authorize(Roles = "Editor,Admin")]
+        [HttpPost]
+        public IActionResult Revert(int articleId, int revisionId)
+        {
+            var article = _context.Articles
+                .Include(a => a.Revisions)
+                .FirstOrDefault(a => a.Id == articleId);
+
+            if (article == null)
+            {
+                TempData["message"] = "Articolul nu există sau nu aveți dreptul să îl vizualizați";
+                TempData["messageType"] = "alert-danger";
+                return RedirectToAction("Index");
+            }
+
+            var revisionToRevert = article.Revisions.FirstOrDefault(r => r.Id == revisionId);
+            if (revisionToRevert == null)
+            {
+                TempData["message"] = "Revizia nu există sau nu aveți dreptul să o revertiți.";
+                TempData["messageType"] = "alert-danger";
+                return RedirectToAction("Show", new { id = articleId });
+            }
+
+            article.Content = revisionToRevert.Content;
+            article.DateTime = DateTime.Now;
+
+            _context.SaveChanges();
+
+            TempData["message"] = "Articolul a fost revertit la revizia selectată.";
+            TempData["messageType"] = "alert-success";
+
+            return RedirectToAction("Show", new { id = articleId });
+        }
+
+        [NonAction]
         public IEnumerable<SelectListItem> GetAllProjects()
         {
             var userId = _userManager.GetUserId(User);

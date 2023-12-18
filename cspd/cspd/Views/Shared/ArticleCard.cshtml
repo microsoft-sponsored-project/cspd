@@ -16,7 +16,7 @@
         <br />
         <br />
 
-        @if (ViewBag.afisareButoane != null && ViewBag.afisareButoane == true && !Model.IsProtected)
+        @if (ViewBag.afisareButoane != null && ViewBag.afisareButoane == true && (!Model.IsProtected || ViewBag.esteAdmin))
         {
             <div class="btn-group" role="group">
                 @if (Model.UserId == ViewBag.userCurent || ViewBag.esteAdmin == true)

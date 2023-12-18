@@ -28,7 +28,9 @@ namespace Company_Software_Project_Documentation.Models
         
         public virtual Project? Project { get; set; }
 
-        public bool IsProtected { get; set; } 
+        public bool IsProtected { get; set; }
+
+        public virtual ICollection<ArticleRevision> Revisions { get; set; } = new List<ArticleRevision>();
 
         public string ParseReadmeContent()
         {
