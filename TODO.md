@@ -26,10 +26,9 @@ tuturor proiectelor si articolelor existente in platforma. (1.0p)
 - [ ] Pentru fiecare articol se tine evidenta modificarilor aparute in timp. Daca un
 admin constata o modificare rau intentionata, acesta poate sterge modificarea
 respectiva, articolul revenind la forma anterioara. (1.0p)
-- [ ] Orice articol poate fi "protejat" prin restricitionarea accesului la editare a
+- [x] Orice articol poate fi "protejat" prin restricitionarea accesului la editare a
 utilizatorului care a publicat articolul. Restrictionarea poate fi impusa de
 catre administrator. (1.0p)
-
 - [x] In acelasi timp articolele pot fi cautate prin intermediul unui motor de
 cautare propriu. Cautarea se va face dupa cuvinte cheie aflate in titlu si/sau
 in descriere (1.0p).

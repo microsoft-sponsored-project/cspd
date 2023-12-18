@@ -1,23 +1,28 @@
-﻿using Company_Software_Project_Documentation.Models;
+﻿using Company_Software_Project_Documentation.Data;
+using Company_Software_Project_Documentation.Models;
 using Company_Software_Project_Documentation.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace Company_Software_Project_Documentation.Controllers
 {
     public class AdminPageController : Controller
     {
+        private readonly ApplicationDbContext _context;
         private readonly UserService _userService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AdminPageController(UserService userService,
+        public AdminPageController(
+            ApplicationDbContext context,
+            UserService userService,
             UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager
-        )
+            RoleManager<IdentityRole> roleManager)
         {
+            _context = context;
             _userService = userService;
             _userManager = userManager;
             _roleManager = roleManager;
@@ -27,16 +32,19 @@ namespace Company_Software_Project_Documentation.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            // Example: Get a list of UserDto objects using UserService
             var userDtos = _userService.GetAllUsers();
-            // Get the roles for each user
             foreach (var userDto in userDtos)
             {
                 userDto.Role = _userService.GetUserRole(userDto.Id);
                 userDto.Role ??= "No role";
             }
 
-            // Use userDtos as needed, such as passing them to a view
+            var articles = _context.Articles
+                .Include(a => a.Project)
+                .Include(a => a.User)
+                .ToList();
+
+            ViewBag.Articles = articles;
             return View(userDtos);
         }
 
@@ -117,6 +125,21 @@ namespace Company_Software_Project_Documentation.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public IActionResult ToggleProtection(int id)
+        {
+            var article = _context.Articles.Find(id);
+
+            if (article != null)
+            {
+               
+                article.IsProtected = !article.IsProtected;
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Index", "AdminPage");
+        }
 
         [NonAction]
         public IEnumerable<SelectListItem> GetAllRolesFromDatabase()

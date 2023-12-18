@@ -48,3 +48,39 @@
         }
     </div>
 </div>
+
+<h2 class="mt-4">Article List</h2>
+<table class="table article-table">
+    <thead>
+        <tr>
+            <th>Titlu</th>
+            <th>Numele Proiectului</th>
+            <th>Timp</th>
+            <th>Creator</th>
+            <th>Protejat</th>
+            <th>Actiune</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var article in ViewBag.Articles)
+        {
+            <tr>
+                <td>
+                    <a href="@Url.Action("Show", "Articles", new { id = article.Id })">
+                        @article.Title
+                    </a>
+                </td>
+                <td>@article.Project.Title</td>
+                <td>@article.DateTime</td>
+                <td>@article.User.UserName</td>
+                <td>@(article.IsProtected ? "Yes" : "No")</td>
+                <td>
+                    <form asp-controller="AdminPage" asp-action="ToggleProtection" method="post">
+                        <input type="hidden" name="id" value="@article.Id" />
+                        <button type="submit" class="btn btn-sm btn-primary">Toggle Protection</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

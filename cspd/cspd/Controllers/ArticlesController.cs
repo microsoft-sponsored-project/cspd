@@ -44,7 +44,7 @@ namespace Company_Software_Project_Documentation.Controllers
             else
             {
                 var search = Convert.ToString(HttpContext.Request.Query["search"]).Trim();
-
+               
                 List<int> articleIds = _context.Articles
                     .Where(at => at.Title.Contains(search) ||
                         at.Content.Contains(search))
@@ -75,10 +75,18 @@ namespace Company_Software_Project_Documentation.Controllers
         [HttpGet]
         public IActionResult Show(int id)
         {
-            Article article = _context.Articles
+            var article = _context.Articles
                 .Include("User")
                 .Include("Project")
-                .Where(art => art.Id == id).First();
+                .FirstOrDefault(a => a.Id == id);
+
+            if (article == null)
+            {
+                TempData["message"] = "Articolul nu există sau nu aveți dreptul să îl vizualizați.";
+                TempData["messageType"] = "alert-danger";
+                SetAccessRights();
+                return RedirectToAction("Index");
+            }
 
             SetAccessRights();
             return View(article);
@@ -109,22 +117,21 @@ namespace Company_Software_Project_Documentation.Controllers
         public IActionResult Edit(int id)
         {
             Article article = _context.Articles
-                .Include(art => art.Project)
-                .Include(art => art.User)
-                .Where(art => art.Id == id)
+                .Include(a => a.Project)
+                .Include(a => a.User)
+                .Where(a => a.Id == id)
                 .First();
 
-            if (article.UserId == _userManager.GetUserId(User) ||
-                User.IsInRole("Admin"))
+            if ((!article.IsProtected && article.UserId == _userManager.GetUserId(User)) || User.IsInRole("Admin"))
             {
                 return View(article);
             }
             else
             {
-                TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui articol care nu va apartine";
+                TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra acestui articol";
                 TempData["messageType"] = "alert-danger";
                 SetAccessRights();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Articles");
             }
         }
         [Authorize(Roles = "Editor,Admin")]
@@ -140,8 +147,9 @@ namespace Company_Software_Project_Documentation.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (article.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
-                    {
+
+                    if ((!article.IsProtected && article.UserId == _userManager.GetUserId(User)) || User.IsInRole("Admin"))
+                    { 
                         article.Title = requestArticle.Title;
                         article.Content = sanitizer.Sanitize(requestArticle.Content);
                         article.DateTime = DateTime.Now; // Actualizam data modificarii in mod dinamic
