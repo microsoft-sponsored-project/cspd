@@ -95,7 +95,6 @@ namespace Company_Software_Project_Documentation.Controllers
             return View(article);
         }
 
-        // Conditii de afisare a butoanelor de editare si stergere
         public void SetAccessRights()
         {
             if (User.IsInRole("Admin"))
@@ -160,7 +159,7 @@ namespace Company_Software_Project_Documentation.Controllers
                     { 
                         article.Title = requestArticle.Title;
                         article.Content = sanitizer.Sanitize(requestArticle.Content);
-                        article.DateTime = DateTime.Now; // Actualizam data modificarii in mod dinamic
+                        article.DateTime = DateTime.Now;
 
                         var revision = new ArticleRevision
                         {
@@ -240,7 +239,6 @@ namespace Company_Software_Project_Documentation.Controllers
             }
         }
 
-        // Doar editorii si adminii pot adauga articole
         [Authorize(Roles = "Editor,Admin")]
         [HttpGet]
         public IActionResult New()
@@ -255,7 +253,6 @@ namespace Company_Software_Project_Documentation.Controllers
         public IActionResult New(Article article)
         {
             article.DateTime = DateTime.Now;
-            // Preluam id-ul userului curent
             article.UserId = _userManager.GetUserId(User);
             article.User = _context.Users.Find(article.UserId);
             article.Project = _context.Projects.Find(article.ProjectId);
@@ -281,7 +278,7 @@ namespace Company_Software_Project_Documentation.Controllers
 
                     _context.SaveChanges();
                     TempData["message"] = "Articolul a fost adaugat!";
-                    TempData["messageType"] = "alert-success"; // success, danger, warning, info
+                    TempData["messageType"] = "alert-success";
                     return RedirectToAction("Index");
                 }
                 else

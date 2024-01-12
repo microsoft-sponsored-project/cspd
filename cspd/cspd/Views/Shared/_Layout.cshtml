@@ -29,7 +29,7 @@
         }
 
         header a.navbar-brand {
-            color: #000000 !important; /* Updated color to black */
+            color: #000000 !important;
             font-weight: bold;
             font-size: 1.8rem;
             border-radius: 8px;
@@ -82,11 +82,7 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        
+                        </li>                        
 
                         @if (User.IsInRole("Admin"))
                         {
@@ -109,7 +105,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - Company Software Project Documentation - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2023 - Company Software Project Documentation
         </div>
     </footer>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

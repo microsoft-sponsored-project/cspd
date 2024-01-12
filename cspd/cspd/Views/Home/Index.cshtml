@@ -30,7 +30,6 @@
 
 @model Company_Software_Project_Documentation.Models.LoginAndRegisterViewModel
 
-<!-- External Styles -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 <style>
     .jumbotron {
@@ -38,7 +37,6 @@
         color: #fff;
     }
 
-    /* Centered Login View Styles */
     .login-view {
         width: 300px;
         margin: 50px auto;
@@ -48,7 +46,6 @@
         text-align: center;
     }
 
-    /* Logged In View Styles */
     .logged-in-view {
         display: flex;
         justify-content: center;
@@ -59,59 +56,55 @@
             margin: 0 10px;
             padding: 10px;
             font-size: 16px;
-            background-color: #28a745; /* Stylish green color for buttons */
+            background-color: #28a745;
             color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
 
-    /* Add margin to the bottom of each article card in the second column */
     .col-md-6:not(:first-child) .card {
         margin-top: 20px;
     }
 
     .custom-button {
         color: #fff;
-        background-color: #28a745; /* Green background color */
-        border: 2px solid #218838; /* Darker green border color */
+        background-color: #28a745; 
+        border: 2px solid #218838;
         border-radius: 5px;
         transition: background-color 0.3s, border-color 0.3s, color 0.3s;
     }
 
         .custom-button:hover {
-            background-color: #218838; /* Darker green on hover */
-            border-color: #1e7e34; /* Darker border color on hover */
+            background-color: #218838;
+            border-color: #1e7e34;
             color: #fff;
         }
 </style>
 
-<!-- Page Content -->
 <div class="container">
     <div class="jumbotron">
         <h1 class="display-4">Welcome to the Documentation page</h1>
         <p class="lead">Explore the latest and most exciting articles below.</p>
     </div>
 
-    <!-- Top 5 Recent Articles -->
     @if (ViewBag.Articles != null && ViewBag.Articles.Count > 0)
     {
         for (var i = 0; i < ViewBag.Articles.Count; i += 2)
         {
             <div class="row">
-                <div class="col-md-6 mb-4"> <!-- Added margin-bottom class -->
+                <div class="col-md-6 mb-4"> 
                     @Html.Partial("ArticleCard", (Company_Software_Project_Documentation.Models.Article)ViewBag.Articles[i])
                 </div>
 
                 @if (i + 1 < ViewBag.Articles.Count)
                 {
-                    <div class="col-md-6 mb-4"> <!-- Added margin-bottom class -->
+                    <div class="col-md-6 mb-4">
                         @Html.Partial("ArticleCard", (Company_Software_Project_Documentation.Models.Article)ViewBag.Articles[i + 1])
                     </div>
                 }
                 else
                 {
-                    <!-- If the last iteration has only one article, add an empty column for spacing -->
                     <div class="col-md-6 mb-4"></div>
                 }
             </div>
@@ -120,12 +113,10 @@
     else
     {
         <div class="text-center mt-4">
-            <h4>No articles available at the moment.</h4>
-            <!-- You can add additional styling or information here as needed -->
+            <h4>No articles available at the moment.</h4
         </div>
     }
 
-    <!-- Check if the user is logged in -->
     @if (!SignInManager.IsSignedIn(User))
     {
         <form asp-controller="Home" asp-action="Register" method="post" id="registerForm">
@@ -186,7 +177,6 @@
     }
     else
     {
-        <!-- If logged in, show stylish buttons for all projects and all articles -->
         <div class="logged-in-view">
             <a href="/Projects/Index" class="btn btn-success btn-lg custom-button mr-2">Explore All Projects</a>
             <a href="/Articles/Index" class="btn btn-info btn-lg custom-button">Discover All Articles</a>

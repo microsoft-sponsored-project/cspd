@@ -16,16 +16,12 @@ namespace Company_Software_Project_Documentation.Services
 
         public List<UserDTO> GetAllUsers()
         {
-            // Retrieve all users from the Identity framework
             var users = _userManager.Users.ToList();
-
-            // Convert the list of ApplicationUser to a list of UserDto
             var userDtos = users.Select(user => new UserDTO(user)).ToList();
 
             return userDtos;
         }
 
-        // Get the role for a user
         public string? GetUserRole(string userId)
         {
             var user = _userManager.FindByIdAsync(userId).Result;

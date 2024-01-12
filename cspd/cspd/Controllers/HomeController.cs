@@ -58,7 +58,6 @@ namespace Company_Software_Project_Documentation.Controllers
             _emailSender = emailSender;
         }
 
-        // Logic for Index page
         public IActionResult Index()
         {
             var articles = _context.Articles
@@ -78,18 +77,12 @@ namespace Company_Software_Project_Documentation.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        // Access rights for articles in the Home page
         public void SetAccessRights()
         {
             if (User.IsInRole("Admin"))
@@ -108,7 +101,6 @@ namespace Company_Software_Project_Documentation.Controllers
             ViewBag.esteEditor = User.IsInRole("Editor");
             ViewBag.userCurent = _userManager.GetUserId(User);
         }
-
 
         ////////////////////////////// Logic for registration page
         /// <summary>
@@ -188,15 +180,10 @@ namespace Company_Software_Project_Documentation.Controllers
                 };
                 var result = await _userManager.CreateAsync(user, model.RegisterModel.Password);
 
-                if (result.Succeeded)
-                {
-                    // You can customize this part based on your application needs
+                if (result.Succeeded) {
                     await _userManager.AddToRoleAsync(user, "Guest");
-
-                    // Sign in the user after registration
                     await _signInManager.SignInAsync(user, isPersistent: true);
-
-                    // Redirect to the homepage or any other desired page
+                    
                     return RedirectToAction("Index", "Home");
                 }
 
@@ -210,7 +197,6 @@ namespace Company_Software_Project_Documentation.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            // If registration fails, return to the registration view with the model
             TempData["shortMessage"] = "Datele introduse nu sunt corecte! Inregistrarea a esuat";
             return RedirectToAction("Index", "Home");
         }
@@ -223,7 +209,7 @@ namespace Company_Software_Project_Documentation.Controllers
                 && ModelState["LoginModel.Password"].Errors.Count == 0
                 && ModelState["LoginModel.RememberMe"].Errors.Count == 0)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.LoginModel.Email, model.LoginModel.Password, model.LoginModel.RememberMe, lockoutOnFailure: false); // True = RememberMe
+                var result = await _signInManager.PasswordSignInAsync(model.LoginModel.Email, model.LoginModel.Password, model.LoginModel.RememberMe, lockoutOnFailure: false);
 
                 if (result.Succeeded)
                 {
@@ -287,7 +273,6 @@ namespace Company_Software_Project_Documentation.Controllers
                 }
             }
 
-            // If we got this far, something failed, redisplay form
             TempData["message"] = "Datele introduse nu sunt corecte!";
             return RedirectToAction("Index", "Home");
         }

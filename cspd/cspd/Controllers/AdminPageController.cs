@@ -52,12 +52,10 @@ namespace Company_Software_Project_Documentation.Controllers
         [HttpGet]
         public IActionResult EditUser(string id)
         {
-            // Example: Get a list of UserDto objects using UserService
             var userDto = _userService.GetAllUsers().Find(u => u.Id == id);
 
             if (userDto != null)
             {
-                // Get the roles for each user
                 userDto.Role = _userService.GetUserRole(userDto.Id);
                 userDto.Role ??= "No role";
 
@@ -78,7 +76,6 @@ namespace Company_Software_Project_Documentation.Controllers
             }
 
             ViewBag.Roles = GetAllRolesFromDatabase();
-            // Use userDtos as needed, such as passing them to a view
             return View(userDto);
         }
 

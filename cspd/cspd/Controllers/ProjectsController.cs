@@ -53,7 +53,6 @@ namespace Company_Software_Project_Documentation.Controllers
             return View(project);
         }
 
-        // Conditii de afisare a butoanelor de editare si stergere
         public void SetAccessRights()
         {
             if (User.IsInRole("Admin"))
@@ -217,7 +216,6 @@ namespace Company_Software_Project_Documentation.Controllers
         public IActionResult New()
         {
             Project project = new Project();
-            /*project.Articles = GetAllArticles();*/
             return View(project);
         }
 
@@ -236,7 +234,7 @@ namespace Company_Software_Project_Documentation.Controllers
 
                     _context.SaveChanges();
                     TempData["message"] = "Proiectul a fost adaugat!";
-                    TempData["messageType"] = "alert-success"; // success, danger, warning, info
+                    TempData["messageType"] = "alert-success";
                     return RedirectToAction("Index");
                 }
                 else
@@ -265,12 +263,6 @@ namespace Company_Software_Project_Documentation.Controllers
                     Value = article.Id.ToString(),
                     Text =  article.Title.ToString()
                 });
-            }
-
-            // Print the list of categories in the Output window
-            foreach (var article in selectList)
-            {
-                System.Diagnostics.Debug.WriteLine(article.Text);
             }
 
             return selectList;

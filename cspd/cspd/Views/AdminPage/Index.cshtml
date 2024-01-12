@@ -33,14 +33,12 @@
         @foreach (var userDto in Model)
         {
             <div class="col-md-4 mb-4">
-                <div class="card user-card">
-                    <!-- Example: If you have a user profile image -->
+                <div class="card user-card
                     <img src="https://avatar.iran.liara.run/public" class="card-img-top" alt="User Profile Image">
                     <div class="card-body">
                         <h5 class="card-title">@userDto.UserName</h5>
                         <p class="card-text">Email: @userDto.Email</p>
-                        <p class="card-text">Role: @userDto.Role</p>
-                        <!-- Add button to edit profile -->
+                        <p class="card-text">Role: @userDto.Role</p
                         <a href="@Url.Action("EditUser", "AdminPage", new { id = userDto.Id })" class="btn btn-primary">Edit</a>
                     </div>
                 </div>
