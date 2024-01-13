@@ -43,7 +43,7 @@
     @Html.Hidden("Id", Model.Id)
 }
 
-<form style="display: padding: 12px 16px" asp-action="DeleteUser" asp-route-id="@Model.Id" method="post" onsubmit="return confirm('Vrei sa stergi aacest utilizator?');">
+<form style="display: padding: 12px 16px" asp-action="DeleteUser" asp-route-id="@Model.Id" method="post" onsubmit="return confirm('Vrei sa stergi acest utilizator?');">
     @Html.Hidden("Id", Model.Id)
     <button type="submit" class="btn btn-danger">Sterge User</button>
 </form>
